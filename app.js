@@ -1,4 +1,4 @@
-// SPECTRADE - Multi-Asset Quantitative Trading Terminal & Risk Lab
+// SPECTRADE - Multi-Asset Quantitative Trading & Risk Lab
 
 const marketSetups = [
   {

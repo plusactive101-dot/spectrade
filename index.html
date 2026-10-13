@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SPECTRADE | Multi-Asset Quantitative Trading Terminal & Risk Lab</title>
+  <title>SPECTRADE | Multi-Asset Quantitative Trading & Risk Lab</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -90,9 +90,6 @@
           <div class="flex items-center space-x-2">
             <span class="font-extrabold text-xl tracking-wider text-white mono">SPEC</span>
             <span class="font-bold text-xl tracking-wide text-cyan-400 mono">TRADE</span>
-            <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 mono uppercase">
-              Terminal
-            </span>
           </div>
           <p class="text-[11px] text-slate-400 hidden sm:block">Multi-Asset Execution • Quantitative Risk Sizing • Alpha Matrices</p>
         </div>
@@ -102,7 +99,7 @@
       <div class="flex items-center space-x-4 text-xs font-medium">
         <a href="#matrix" class="text-slate-400 hover:text-cyan-400 transition hidden sm:inline">Watchlist</a>
         <a href="#calculator" class="text-slate-400 hover:text-cyan-400 transition hidden sm:inline">Position Sizer</a>
-        <a href="#chart-section" class="text-slate-400 hover:text-cyan-400 transition hidden md:inline">Terminal</a>
+        <a href="#chart-section" class="text-slate-400 hover:text-cyan-400 transition hidden md:inline">Chart</a>
         <a href="#simulator" class="text-slate-400 hover:text-cyan-400 transition hidden md:inline">Expectancy</a>
         <div class="flex items-center space-x-2 bg-carbon-850 px-3 py-1.5 rounded-full border border-carbon-700 mono">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -248,7 +245,7 @@
           <h2 class="text-xl font-bold text-white flex items-center gap-2">
             <i class="fa-solid fa-table-cells text-cyan-400"></i> Multi-Asset Setup Watchlist
           </h2>
-          <p class="text-xs text-slate-400 mt-1">Click any asset row to load live candlestick analytics in the terminal</p>
+          <p class="text-xs text-slate-400 mt-1">Click any asset row to load live candlestick analytics in the chart</p>
         </div>
       </div>
 
@@ -274,7 +271,7 @@
       </div>
     </section>
 
-    <!-- MODULE 3: INTERACTIVE TRADINGVIEW TERMINAL -->
+    <!-- MODULE 3: INTERACTIVE TRADINGVIEW CHART -->
     <section id="chart-section" class="glass-card rounded-2xl p-6 border border-carbon-800">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-carbon-800 gap-2 mb-4">
         <div>
