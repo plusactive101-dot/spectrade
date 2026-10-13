@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPECTRADE | Multi-Asset Quantitative Trading Terminal & Risk Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            trade: {
+              400: '#38bdf8',
+              500: '#0284c7',
+              accent: '#10b981',
+              neon: '#00f0ff',
+              gold: '#f59e0b',
+              loss: '#f43f5e'
+            },
+            carbon: {
+              950: '#06080d',
+              900: '#0b0f17',
+              850: '#111723',
+              800: '#192233',
+              700: '#233047'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .glass-card {
+      background: rgba(17, 23, 35, 0.78);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 35px -5px rgba(0, 240, 255, 0.16);
+    }
+  </style>
+</head>
+<body class="bg-carbon-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-trade-500 selection:text-white">
+
+  <!-- TOP TRADINGVIEW MULTI-ASSET TICKER TAPE -->
+  <div class="border-b border-carbon-800 bg-black/50">
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+      {
+        "symbols": [
+          { "proName": "BINANCE:BTCUSDT", "title": "Bitcoin" },
+          { "proName": "BINANCE:ETHUSDT", "title": "Ethereum" },
+          { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
+          { "proName": "FOREXCOM:NSXUSD", "title": "Nasdaq 100" },
+          { "proName": "FX_IDC:EURUSD", "title": "EUR/USD" },
+          { "proName": "OANDA:XAUUSD", "title": "Gold" },
+          { "proName": "NASDAQ:NVDA", "title": "Nvidia" }
+        ],
+        "showSymbolLogo": true,
+        "isTransparent": true,
+        "displayMode": "adaptive",
+        "colorTheme": "dark",
+        "locale": "en"
+      }
+      </script>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="border-b border-carbon-800 bg-carbon-900/90 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- LOGO -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-emerald-400 flex items-center justify-center text-white shadow-lg shadow-cyan-500/25">
+          <i class="fa-solid fa-chart-line text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-extrabold text-xl tracking-wider text-white mono">SPEC</span>
+            <span class="font-bold text-xl tracking-wide text-cyan-400 mono">TRADE</span>
+            <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 mono uppercase">
+              Terminal
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 hidden sm:block">Multi-Asset Execution • Quantitative Risk Sizing • Alpha Matrices</p>
+        </div>
+      </div>
+
+      <!-- NAV LINKS -->
+      <div class="flex items-center space-x-4 text-xs font-medium">
+        <a href="#matrix" class="text-slate-400 hover:text-cyan-400 transition hidden sm:inline">Watchlist</a>
+        <a href="#calculator" class="text-slate-400 hover:text-cyan-400 transition hidden sm:inline">Position Sizer</a>
+        <a href="#chart-section" class="text-slate-400 hover:text-cyan-400 transition hidden md:inline">Terminal</a>
+        <a href="#simulator" class="text-slate-400 hover:text-cyan-400 transition hidden md:inline">Expectancy</a>
+        <div class="flex items-center space-x-2 bg-carbon-850 px-3 py-1.5 rounded-full border border-carbon-700 mono">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-300 text-[11px]">Desk Engine Online</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 flex-1 w-full">
+
+    <!-- HERO SECTION -->
+    <div class="glass-card rounded-2xl p-6 sm:p-8 relative overflow-hidden glow-cyan border border-carbon-800">
+      <div class="absolute -right-16 -top-16 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-16 -bottom-16 w-80 h-80 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-3xl space-y-3">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs bg-carbon-850 text-cyan-300 border border-carbon-700 mono">
+          <i class="fa-solid fa-crosshairs text-emerald-400"></i>
+          <span>Institutional Multi-Asset Quantitative Execution Suite</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          The Spectral Edge in Trading & Position Risk
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Monitor trade setups across Crypto, Equities, Forex, and Commodities. Calculate fractional Kelly and 1% risk position sizing, project stop-loss geometry, and stress-test statistical expectancy.
+        </p>
+
+        <!-- ASSET CLASS FILTER CHIPS -->
+        <div class="pt-2 flex flex-wrap gap-2 text-xs mono">
+          <button onclick="filterAssetClass('all')" class="asset-btn px-3 py-1.5 rounded-lg bg-cyan-500 text-carbon-950 font-bold transition" data-asset="all">All Assets (6)</button>
+          <button onclick="filterAssetClass('Crypto')" class="asset-btn px-3 py-1.5 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-asset="Crypto">Crypto (BTC/ETH)</button>
+          <button onclick="filterAssetClass('Equities')" class="asset-btn px-3 py-1.5 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-asset="Equities">US Equities (NVDA/PLTR)</button>
+          <button onclick="filterAssetClass('Forex')" class="asset-btn px-3 py-1.5 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-asset="Forex">FX & Currencies</button>
+          <button onclick="filterAssetClass('Commodities')" class="asset-btn px-3 py-1.5 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-asset="Commodities">Gold & Commodities</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1: INTERACTIVE POSITION SIZING & RISK ARCHITECT -->
+    <section id="calculator" class="glass-card rounded-2xl p-6 sm:p-8 border border-carbon-800 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-carbon-800 gap-2">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-calculator text-cyan-400"></i> Mathematical Position Sizing & Risk Architect
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Computes exact unit sizes based on risk tolerance, stop loss distance, and portfolio equity</p>
+        </div>
+        <div class="text-xs text-emerald-400 mono flex items-center gap-1.5 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+          <i class="fa-solid fa-shield-halved"></i> Capital Preservation Engine
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- INPUTS (6 COLS) -->
+        <div class="lg:col-span-6 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs mono">
+            <div>
+              <label class="text-slate-400 mb-1 block">ACCOUNT EQUITY ($)</label>
+              <input type="number" id="calcEquity" value="50000" oninput="calculatePositionSize()" class="w-full bg-carbon-850 border border-carbon-700 rounded-xl px-4 py-2.5 text-white font-bold outline-none focus:border-cyan-400">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-400 mb-1">
+                <label>RISK PER TRADE (%)</label>
+                <span id="riskPercentVal" class="text-cyan-400 font-bold">1.0%</span>
+              </div>
+              <input type="range" id="calcRiskPct" min="0.25" max="5.0" step="0.25" value="1.0" oninput="calculatePositionSize()" class="w-full h-2 bg-carbon-800 rounded cursor-pointer mt-2 accent-cyan-400">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs mono">
+            <div>
+              <label class="text-slate-400 mb-1 block">ENTRY PRICE ($)</label>
+              <input type="number" id="calcEntry" value="138.50" step="0.01" oninput="calculatePositionSize()" class="w-full bg-carbon-850 border border-carbon-700 rounded-xl px-3 py-2 text-white font-bold outline-none focus:border-cyan-400">
+            </div>
+
+            <div>
+              <label class="text-slate-400 mb-1 block">STOP LOSS ($)</label>
+              <input type="number" id="calcStop" value="129.00" step="0.01" oninput="calculatePositionSize()" class="w-full bg-carbon-850 border border-carbon-700 rounded-xl px-3 py-2 text-rose-400 font-bold outline-none focus:border-rose-400">
+            </div>
+
+            <div>
+              <label class="text-slate-400 mb-1 block">PROFIT TARGET ($)</label>
+              <input type="number" id="calcTarget" value="165.00" step="0.01" oninput="calculatePositionSize()" class="w-full bg-carbon-850 border border-carbon-700 rounded-xl px-3 py-2 text-emerald-400 font-bold outline-none focus:border-emerald-400">
+            </div>
+          </div>
+
+          <div class="pt-2 flex gap-2 text-xs mono">
+            <button onclick="setQuickSetup('BTC', 65000, 62500, 72500)" class="px-2.5 py-1 rounded bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700">Preset: BTC</button>
+            <button onclick="setQuickSetup('NVDA', 138.5, 129, 165)" class="px-2.5 py-1 rounded bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700">Preset: NVDA</button>
+            <button onclick="setQuickSetup('GOLD', 2650, 2615, 2755)" class="px-2.5 py-1 rounded bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700">Preset: XAU</button>
+          </div>
+        </div>
+
+        <!-- RESULTS MATRIX (6 COLS) -->
+        <div class="lg:col-span-6 bg-carbon-900 rounded-xl p-6 border border-carbon-800 flex flex-col justify-between space-y-4">
+          
+          <div>
+            <div class="flex justify-between items-baseline text-xs mono">
+              <span class="text-slate-400">RECOMMENDED POSITION SIZE</span>
+              <span class="text-emerald-400 font-bold" id="resRiskReward">R:R 2.79 : 1</span>
+            </div>
+            <div class="text-4xl font-extrabold text-white mono mt-1 flex items-baseline gap-2">
+              <span id="resSharesDisplay">52.6</span>
+              <span class="text-sm font-semibold text-cyan-400">Units / Shares</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3 text-xs mono pt-4 border-t border-carbon-800">
+            <div class="bg-carbon-850 p-3 rounded-lg border border-carbon-700">
+              <div class="text-[10px] text-slate-400">TOTAL CAPITAL</div>
+              <div class="text-sm font-bold text-white mt-1" id="resCapitalDisplay">$7,285</div>
+            </div>
+            <div class="bg-carbon-850 p-3 rounded-lg border border-carbon-700">
+              <div class="text-[10px] text-rose-400">MAX LOSS ($)</div>
+              <div class="text-sm font-bold text-rose-400 mt-1" id="resMaxLossDisplay">-$500</div>
+            </div>
+            <div class="bg-carbon-850 p-3 rounded-lg border border-carbon-700">
+              <div class="text-[10px] text-emerald-400">POTENTIAL PROFIT</div>
+              <div class="text-sm font-bold text-emerald-400 mt-1" id="resProfitDisplay">+$1,394</div>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-400 leading-relaxed bg-carbon-850/60 p-3 rounded-lg border border-carbon-800 flex items-start gap-2">
+            <i class="fa-solid fa-shield-halved text-cyan-400 mt-0.5"></i>
+            <span>
+              <strong>Risk Rule:</strong> Limiting loss to exactly 1.0% ($500) allows your trading account to sustain 20 consecutive losses while preserving >81% of capital.
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- MODULE 2: MULTI-ASSET SETUP MATRIX TABLE -->
+    <section id="matrix" class="glass-card rounded-2xl p-6 border border-carbon-800">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-6 border-b border-carbon-800 gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-table-cells text-cyan-400"></i> Multi-Asset Setup Watchlist
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Click any asset row to load live candlestick analytics in the terminal</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto mt-4">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="text-slate-400 border-b border-carbon-800 mono text-xs">
+              <th class="py-3 px-3">ASSET</th>
+              <th class="py-3 px-3">CLASS</th>
+              <th class="py-3 px-3">SETUP / THESIS</th>
+              <th class="py-3 px-3">ENTRY</th>
+              <th class="py-3 px-3">TARGET</th>
+              <th class="py-3 px-3">STOP</th>
+              <th class="py-3 px-3">R:R</th>
+              <th class="py-3 px-3">BIAS</th>
+              <th class="py-3 px-3 text-right">ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="matrixTableBody" class="divide-y divide-carbon-800/60 font-medium">
+            <!-- Injected dynamically by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MODULE 3: INTERACTIVE TRADINGVIEW TERMINAL -->
+    <section id="chart-section" class="glass-card rounded-2xl p-6 border border-carbon-800">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-carbon-800 gap-2 mb-4">
+        <div>
+          <div class="flex items-center space-x-2">
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-chart-candlestick text-emerald-400"></i> Live Execution Feed
+            </h2>
+            <span id="activeTickerBadge" class="px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 mono text-xs font-bold">
+              BINANCE:BTCUSDT
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">Multi-timeframe charting powered by TradingView</p>
+        </div>
+        <div class="text-xs text-slate-400 mono">
+          Click any row in the matrix to update the chart instantly
+        </div>
+      </div>
+
+      <div class="w-full h-[600px] rounded-xl overflow-hidden bg-black/60 border border-carbon-800" id="tv_chart_container">
+        <iframe 
+          id="tv_chart_iframe"
+          src="https://www.tradingview.com/widgetembed/?symbol=BINANCE%3ABTCUSDT&interval=D&symboledit=1&saveimage=1&toolbarbg=0a0f1d&studies=%5B%22MASimple%40tv-basicstudies%22%2C%22RSI%40tv-basicstudies%22%2C%22Volume%40tv-basicstudies%22%5D&theme=dark&style=1&timezone=Etc%2FUTC&locale=en" 
+          style="width: 100%; height: 100%; border: none; border-radius: 12px; display: block;" 
+          frameborder="0" 
+          allowtransparency="true" 
+          scrolling="no" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    </section>
+
+    <!-- MODULE 4: STATISTICAL EXPECTANCY & MONTE CARLO SIMULATOR -->
+    <section id="simulator" class="glass-card rounded-2xl p-6 sm:p-8 border border-carbon-800 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-carbon-800 gap-2">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-dice text-cyan-400"></i> Statistical Expectancy & Edge Simulator
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Simulate 50 trades based on your win rate and risk-reward profile to model equity curve geometry</p>
+        </div>
+        <button onclick="runSimulation()" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-carbon-950 font-bold text-xs mono transition flex items-center gap-1.5 shadow-md shadow-cyan-500/20">
+          <i class="fa-solid fa-rotate-right"></i> Run 50-Trade Simulation
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <div class="lg:col-span-5 space-y-4 text-xs mono">
+          <div>
+            <div class="flex justify-between text-slate-400 mb-1">
+              <label>WIN RATE (%)</label>
+              <span id="simWinRateVal" class="text-emerald-400 font-bold">50%</span>
+            </div>
+            <input type="range" id="simWinRate" min="30" max="80" step="5" value="50" oninput="updateSimParams()" class="w-full h-2 bg-carbon-800 rounded cursor-pointer accent-emerald-400">
+          </div>
+
+          <div>
+            <div class="flex justify-between text-slate-400 mb-1">
+              <label>RISK-TO-REWARD (R:R)</label>
+              <span id="simRRVal" class="text-cyan-400 font-bold">2.5 : 1</span>
+            </div>
+            <input type="range" id="simRR" min="1.0" max="5.0" step="0.25" value="2.5" oninput="updateSimParams()" class="w-full h-2 bg-carbon-800 rounded cursor-pointer accent-cyan-400">
+          </div>
+
+          <div class="bg-carbon-900 p-4 rounded-xl border border-carbon-800 space-y-2">
+            <div class="flex justify-between text-slate-400">
+              <span>Expected Value per Trade:</span>
+              <span class="text-emerald-400 font-bold" id="simEVDisplay">+0.75 R</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>50-Trade Projected Return:</span>
+              <span class="text-cyan-400 font-bold" id="simProjReturn">+37.5 R</span>
+            </div>
+            <p class="text-[11px] text-slate-500 leading-normal pt-2 border-t border-carbon-800">
+              Math: $EV = (Win\% \times R:R) - (Loss\% \times 1)$. Any system with $EV > 0$ yields exponential compounding over a series of trades.
+            </p>
+          </div>
+        </div>
+
+        <!-- SIMULATED EQUITY CURVE BARS -->
+        <div class="lg:col-span-7 bg-carbon-900 rounded-xl p-5 border border-carbon-800 flex flex-col justify-between">
+          <div class="flex justify-between text-xs mono text-slate-400 pb-2 border-b border-carbon-800">
+            <span>50-Trade Simulated PnL Outcome</span>
+            <span class="text-emerald-400" id="simFinalOutcome">+42.5 R Units</span>
+          </div>
+
+          <div class="h-44 w-full flex items-end gap-1 pt-4 pb-2" id="simBarsContainer">
+            <!-- Bars rendered dynamically -->
+          </div>
+
+          <div class="flex justify-between text-[10px] mono text-slate-500 pt-2 border-t border-carbon-800">
+            <span>Trade 1</span>
+            <span>Trade 25</span>
+            <span>Trade 50</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-carbon-800 bg-carbon-900/90 py-8 mt-12 text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="font-extrabold text-white mono">SPECTRADE</span>
+        <span>•</span>
+        <span>Multi-Asset Quantitative Execution</span>
+        <span>•</span>
+        <span>Risk & Expectancy Architecture</span>
+      </div>
+
+      <div class="flex items-center space-x-4 mono">
+        <span class="text-cyan-400 flex items-center gap-1">
+          <i class="fa-solid fa-chart-line"></i> Cloudflare Edge Network
+        </span>
+        <span>•</span>
+        <span>Sub-second Market Telemetry</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
