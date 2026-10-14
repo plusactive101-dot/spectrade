@@ -97,12 +97,14 @@
 
       <!-- NAV LINKS -->
       <div class="flex items-center space-x-4 text-xs font-medium">
+        <a href="#top10-screener" class="text-emerald-400 hover:text-emerald-300 font-semibold transition hidden sm:flex items-center gap-1.5 bg-emerald-950/40 px-3 py-1 rounded-full border border-emerald-800/60 mono">
+          <i class="fa-solid fa-bolt text-[10px]"></i> Top 10 Screener
+        </a>
         <a href="#matrix" class="text-slate-400 hover:text-cyan-400 transition hidden sm:inline">Watchlist</a>
         <a href="#calculator" class="text-slate-400 hover:text-cyan-400 transition hidden sm:inline">Position Sizer</a>
         <a href="#chart-section" class="text-slate-400 hover:text-cyan-400 transition hidden md:inline">Chart</a>
-        <a href="#simulator" class="text-slate-400 hover:text-cyan-400 transition hidden md:inline">Expectancy</a>
-        <a href="#quant-suite" class="text-cyan-400 hover:text-cyan-300 font-semibold transition hidden lg:flex items-center gap-1.5 bg-cyan-950/40 px-3 py-1 rounded-full border border-cyan-800/60 mono">
-          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span> Quant Suite
+        <a href="#backtester-lab" class="text-cyan-400 hover:text-cyan-300 font-semibold transition hidden lg:flex items-center gap-1.5 bg-cyan-950/40 px-3 py-1 rounded-full border border-cyan-800/60 mono">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span> Backtester
         </a>
         <div class="flex items-center space-x-2 bg-carbon-850 px-3 py-1.5 rounded-full border border-carbon-700 mono">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -476,8 +478,75 @@
 
       </div>
 
+      <!-- MODULE 5.1: TOP 10 STOCKS ALGORITHMIC SCREENER -->
+      <div id="top10-screener" class="bg-carbon-900/90 rounded-2xl p-6 border border-carbon-800 space-y-6">
+        
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between pb-4 border-b border-carbon-800 gap-4">
+          <div>
+            <div class="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full text-[10px] bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 mono mb-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Multi-Factor Alpha Radar</span>
+            </div>
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-crosshairs text-emerald-400"></i> Top 10 Stocks Algorithmic Screener
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">
+              Evaluates 3-Bar Fair Value Gaps (FVG), Larry Connors RSI-2 Oversold Pullbacks, and 200-SMA Trend Regimes across market leaders.
+            </p>
+          </div>
+
+          <!-- MANUAL TRIGGER BUTTON -->
+          <div class="flex items-center gap-3">
+            <button onclick="triggerTop10Screen()" id="btnTriggerScreen" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-carbon-950 font-extrabold text-xs mono transition flex items-center gap-2 shadow-lg shadow-emerald-500/25 active:scale-95">
+              <i class="fa-solid fa-bolt text-sm" id="screenIcon"></i>
+              <span id="screenBtnText">Run Top 10 Stock Screen Now</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SCANNER STATUS & TELEMETRY BAR -->
+        <div id="screenStatusBar" class="flex flex-col sm:flex-row sm:items-center justify-between text-xs mono px-4 py-2.5 rounded-xl bg-carbon-850 border border-carbon-700 text-slate-400 gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400" id="screenStatusDot"></span>
+            <span class="text-slate-300 font-medium" id="screenStatusText">10/10 Equities Analyzed • Multi-Factor Confluence Active</span>
+          </div>
+          <div class="flex items-center gap-3 text-[11px] text-slate-500">
+            <span id="screenTimestamp">Last Screened: 14 Oct 12:00 UTC</span>
+            <span class="text-cyan-400 cursor-pointer hover:underline" onclick="triggerTop10Screen()"><i class="fa-solid fa-rotate-right"></i> Refresh</span>
+          </div>
+        </div>
+
+        <!-- TOP 10 SCREENER RESULTS TABLE -->
+        <div class="overflow-x-auto rounded-xl border border-carbon-800">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead class="bg-carbon-850 text-slate-400 mono text-[11px] border-b border-carbon-800">
+              <tr>
+                <th class="py-3 px-3"># RANK</th>
+                <th class="py-3 px-3">TICKER & COMPANY</th>
+                <th class="py-3 px-3">PRICE (24H)</th>
+                <th class="py-3 px-3">DETECTED QUANT SETUP</th>
+                <th class="py-3 px-3">BIAS</th>
+                <th class="py-3 px-3">ENTRY ZONE</th>
+                <th class="py-3 px-3">STOP / TARGET (2R)</th>
+                <th class="py-3 px-3">EDGE SCORE</th>
+                <th class="py-3 px-3 text-right">ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="top10ScreenerBody" class="divide-y divide-carbon-800/60 font-medium mono text-[11px]">
+              <!-- Populated dynamically by triggerTop10Screen() in app.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex items-center justify-between text-xs mono text-slate-500 pt-1">
+          <span>💡 Tip: Click any row or "Select & Backtest" to instantly load that asset into the Backtest Lab, Chart, and Position Sizer.</span>
+          <span class="text-cyan-400">10 Market Leaders Screened</span>
+        </div>
+
+      </div>
+
       <!-- INTERACTIVE QUANTITATIVE BACKTESTER LAB -->
-      <div class="bg-carbon-900/90 rounded-2xl p-6 border border-carbon-800 space-y-6">
+      <div id="backtester-lab" class="bg-carbon-900/90 rounded-2xl p-6 border border-carbon-800 space-y-6">
         
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-carbon-800 gap-2">
           <div>
@@ -491,15 +560,56 @@
           </button>
         </div>
 
+        <!-- QUICK ASSET SELECTOR CHIPS & MANUAL INPUT -->
+        <div class="space-y-2 bg-carbon-850/60 p-4 rounded-xl border border-carbon-800">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs mono">
+            <span class="text-slate-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-hand-pointer text-cyan-400"></i> EASY ASSET PRESETS (CLICK TO SELECT):
+            </span>
+            <span class="text-cyan-300 font-bold" id="btActiveAssetLabel">Active: NVDA (Nvidia Corp)</span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1.5 text-xs mono pt-1">
+            <button onclick="setBacktestAsset('NVDA')" class="bt-chip px-2.5 py-1 rounded-lg bg-cyan-500 text-carbon-950 font-bold transition" data-chip="NVDA">NVDA</button>
+            <button onclick="setBacktestAsset('AAPL')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="AAPL">AAPL</button>
+            <button onclick="setBacktestAsset('MSFT')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="MSFT">MSFT</button>
+            <button onclick="setBacktestAsset('TSLA')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="TSLA">TSLA</button>
+            <button onclick="setBacktestAsset('AMZN')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="AMZN">AMZN</button>
+            <button onclick="setBacktestAsset('META')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="META">META</button>
+            <button onclick="setBacktestAsset('GOOGL')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="GOOGL">GOOGL</button>
+            <button onclick="setBacktestAsset('AMD')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="AMD">AMD</button>
+            <button onclick="setBacktestAsset('PLTR')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="PLTR">PLTR</button>
+            <button onclick="setBacktestAsset('ASPI')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="ASPI">ASPI</button>
+            <button onclick="setBacktestAsset('SPY')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="SPY">SPY</button>
+            <button onclick="setBacktestAsset('EURUSD')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="EURUSD">EUR/USD</button>
+            <button onclick="setBacktestAsset('XAUUSD')" class="bt-chip px-2.5 py-1 rounded-lg bg-carbon-850 hover:bg-carbon-800 text-slate-300 border border-carbon-700 transition" data-chip="XAUUSD">Gold (XAU)</button>
+
+            <!-- MANUAL ASSET SEARCH INPUT -->
+            <div class="flex items-center gap-1.5 sm:ml-auto w-full sm:w-auto mt-2 sm:mt-0">
+              <input type="text" id="manualTickerInput" placeholder="Manual Symbol (e.g. COIN)" class="uppercase bg-carbon-850 border border-carbon-700 rounded-lg px-3 py-1.5 text-white text-xs font-bold outline-none focus:border-cyan-400 w-full sm:w-44" onkeydown="if(event.key==='Enter') applyManualAsset()">
+              <button onclick="applyManualAsset()" class="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-carbon-950 font-bold transition flex items-center gap-1">
+                <i class="fa-solid fa-magnifying-glass text-[10px]"></i> Load
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- CONTROLS & PARAMS -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs mono">
           
           <div>
-            <label class="text-slate-400 mb-1 block">ASSET TICKER</label>
-            <select id="btSymbol" onchange="executeBacktest()" class="w-full bg-carbon-850 border border-carbon-700 rounded-xl px-3 py-2 text-white font-bold outline-none focus:border-cyan-400">
+            <label class="text-slate-400 mb-1 block">ASSET TICKER (DROPDOWN)</label>
+            <select id="btSymbol" onchange="syncFromDropdown()" class="w-full bg-carbon-850 border border-carbon-700 rounded-xl px-3 py-2 text-white font-bold outline-none focus:border-cyan-400">
               <option value="NVDA">NVDA (Nvidia Corp)</option>
-              <option value="TSLA">TSLA (Tesla Inc)</option>
               <option value="AAPL">AAPL (Apple Inc)</option>
+              <option value="MSFT">MSFT (Microsoft Corp)</option>
+              <option value="TSLA">TSLA (Tesla Inc)</option>
+              <option value="AMZN">AMZN (Amazon.com)</option>
+              <option value="META">META (Meta Platforms)</option>
+              <option value="GOOGL">GOOGL (Alphabet Inc)</option>
+              <option value="AMD">AMD (Advanced Micro Devices)</option>
+              <option value="PLTR">PLTR (Palantir Technologies)</option>
+              <option value="ASPI">ASPI (ASP Isotopes - MultiBagger)</option>
               <option value="SPY">SPY (S&P 500 ETF)</option>
               <option value="EURUSD">EUR/USD (Forex Major)</option>
               <option value="XAUUSD">XAU/USD (Gold Spot)</option>
@@ -523,6 +633,11 @@
             <label class="text-slate-400 mb-1 block">TIMEFRAME & DATA FEED</label>
             <select id="btTimeframe" onchange="executeBacktest()" class="w-full bg-carbon-850 border border-carbon-700 rounded-xl px-3 py-2 text-white font-bold outline-none focus:border-cyan-400">
               <option value="1d">1-Day Bars (Parquet Cache)</option>
+              <option value="1h">1-Hour Bars (Data Hub)</option>
+            </select>
+          </div>
+
+        </div>
               <option value="1h">1-Hour Bars (Data Hub)</option>
             </select>
           </div>
